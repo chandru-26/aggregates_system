@@ -67,6 +67,32 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
+// LoginOwner
+app.post('/api/loginOwner', async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const result = await pool.query(
+      'SELECT * FROM Owners WHERE email = $1 AND password = $2',
+      [email, password]
+    );
+    if (result.rows.length > 0) {
+      const user = result.rows[0];
+      res.status(200).json({
+        success: true,
+        user: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+        },
+      });
+    } else {
+      res.status(401).json({ success: false, error: 'Invalid credentials' });
+    }
+  } catch (err) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 // Add product
 app.post('/api/products', async (req, res) => {
   const { name, image_url, quantity } = req.body;

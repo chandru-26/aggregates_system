@@ -8,6 +8,7 @@ import {
 import LandingPage from "./components/LandingPage";
 import Register from "./components/Register";
 import Login from "./components/Login";
+import LoginOwner from "./components/LoginOwner";
 import Dashboard from "./components/Dashboard";
 import OwnerPanel from "./components/OwnerPanel";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -42,6 +43,7 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login setUser={setUser} />} />
+        <Route path="/loginOwner" element={<LoginOwner setUser={setUser} />} />
         <Route path="/owner" element={<OwnerPanel />} />
         <Route path="/AddProd" element={<AddProduct />} />
         <Route path="/ShowOrd" element={<ShowOrders />} />
@@ -51,6 +53,12 @@ function App() {
           path="/dashboard"
           element={
             user ? <Dashboard user={user} /> : <Navigate to="/login" replace />
+          }
+        />
+        <Route
+          path="/owner"
+          element={
+            user ? <OwnerPanel user={user} /> : <Navigate to="/loginOwner" replace />
           }
         />
       </Routes>
