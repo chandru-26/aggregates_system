@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -13,13 +14,14 @@ app.use(cors());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // PostgreSQL connection
+
 const pool = new Pool({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'ordering_db',
-  password: 'root',
-  port: 5432,
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
 });
+
 
 // Test route
 app.get('/api/test', (req, res) => {
