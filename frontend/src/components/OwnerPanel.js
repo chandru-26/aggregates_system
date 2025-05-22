@@ -13,7 +13,6 @@ import logo from "../assets/images/logo.png";
 const images = [bg1, bg2, bg3, bg4];
 
 function OwnerPanel({ user }) {
-  // ✅ Accept user as a prop
   const navigate = useNavigate();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [formData, setFormData] = useState({
@@ -31,27 +30,25 @@ function OwnerPanel({ user }) {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/products");
+        const res = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/products`);
 
-        // Make sure it's an array
         if (Array.isArray(res.data)) {
           setProducts(res.data);
         } else if (res.data.products) {
-          setProducts(res.data.products); // in case API returns { products: [...] }
+          setProducts(res.data.products);
         } else {
           console.error("❗ Unexpected data format:", res.data);
-          setProducts([]); // fallback
+          setProducts([]);
         }
       } catch (error) {
         console.error("❗ Error fetching products:", error);
-        setProducts([]); // fallback to empty array on error
+        setProducts([]);
       }
     };
 
     fetchProducts();
   }, []);
 
-  // Background Slideshow Effect
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prevSlide) => (prevSlide + 1) % images.length);
@@ -59,23 +56,16 @@ function OwnerPanel({ user }) {
     return () => clearInterval(interval);
   }, []);
 
-  // Fetch cart items
-
-  // Handle Input Change
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
-
 
   return (
     <div className="container-fluid owner-panel-container">
       <button className="back-button" onClick={() => navigate(-1)}>
         ⬅ Back
       </button>
-      
 
-      {/* Background Slideshow */}
       <div className="slideshow-container">
         {images.map((image, index) => (
           <div
@@ -86,7 +76,6 @@ function OwnerPanel({ user }) {
         ))}
       </div>
 
-      {/* Main Content */}
       <div className="row justify-content-center align-items-center min-vh-100">
         <div className="col-md-6 col-lg-4 text-center owner-content">
           <div className="logo-container">
@@ -95,13 +84,12 @@ function OwnerPanel({ user }) {
 
           <h2 className="text-white mb-3">📦 Add New Product</h2>
           <button
-              className="AddProd btn-success btn-lg m-2"
-              onClick={() => navigate('/AddProd')}
-            >
-              ADD Products
-            </button>
+            className="AddProd btn-success btn-lg m-2"
+            onClick={() => navigate('/AddProd')}
+          >
+            ADD Products
+          </button>
 
-          {/* Toggle Button for Products */}
           <button
             className="ShowProd btn-light mt-4"
             onClick={() => setShowOrders(!showOrders)}
@@ -109,7 +97,6 @@ function OwnerPanel({ user }) {
             {showOrders ? " Hide Products" : "📂 Show Products"}
           </button>
 
-          {/* Conditionally Show Products */}
           {showOrders && (
             <>
               <h3 className="text-white mt-4">🛍 Existing Products</h3>
@@ -144,11 +131,11 @@ function OwnerPanel({ user }) {
             </>
           )}
           <button
-              className="ShowOrders btn-success btn-lg m-2"
-              onClick={() => navigate('/ShowOrd')}
-            >
-              Show Orders
-            </button>
+            className="ShowOrders btn-success btn-lg m-2"
+            onClick={() => navigate('/ShowOrd')}
+          >
+            Show Orders
+          </button>
           {loadingOrders && <p className="text-white">⏳ Loading orders...</p>}
         </div>
       </div>

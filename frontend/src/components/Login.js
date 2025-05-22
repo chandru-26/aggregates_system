@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Login.css';
-import 'bootstrap/dist/css/bootstrap.min.css'; // Bootstrap CSS
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 import bg1 from '../assets/images/bg1.jpg';
 import bg2 from '../assets/images/bg2.jpg';
 import bg3 from '../assets/images/bg3.jpg';
 import bg4 from '../assets/images/bg4.jpg';
-import logo from '../assets/images/logo.png'; // Import logo
+import logo from '../assets/images/logo.png';
 
 const images = [bg1, bg2, bg3, bg4];
 
@@ -36,7 +36,7 @@ function Login({ setUser }) {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await axios.post('http://localhost:5000/api/login', formData);
+      const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/login`, formData);
       if (response.data.success) {
         setUser(response.data.user);
         alert('✅ Login successful! Redirecting to dashboard...');
@@ -53,10 +53,7 @@ function Login({ setUser }) {
 
   return (
     <div className="container-fluid login-container">
-      {/* Back button */}
       <button className="back-button" onClick={() => navigate(-1)}>⬅ Back</button>
-      
-      {/* Background slideshow */}
       <div className="slideshow-container">
         {images.map((image, index) => (
           <div
@@ -66,14 +63,11 @@ function Login({ setUser }) {
           />
         ))}
       </div>
-
-      {/* Main content */}
       <div className="row justify-content-center align-items-center min-vh-100">
         <div className="col-md-6 col-lg-4 text-center login-content">
           <div className="logo-container">
             <img src={logo} alt="Logo" className="logo" />
           </div>
-
           <h2 className="text-white mb-3">🔐 Customer Login</h2>
           <form onSubmit={handleSubmit}>
             <input

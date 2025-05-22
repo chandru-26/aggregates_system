@@ -1,4 +1,3 @@
-// ... other imports
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -14,16 +13,18 @@ import logo from "../assets/images/logo.png";
 
 const images = [bg1, bg2, bg3, bg4];
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:5000";
+
 const ProductImage = ({ imageUrl, productName }) => {
   const [imgSrc, setImgSrc] = useState(
     imageUrl
-      ? `http://localhost:5000/uploads/${imageUrl}`
-      : "http://localhost:5000/uploads/default.jpg"
+      ? `${API_BASE_URL}/uploads/${imageUrl}`
+      : `${API_BASE_URL}/uploads/default.jpg`
   );
 
   const handleError = () => {
-    if (imgSrc !== "http://localhost:5000/uploads/default.jpg") {
-      setImgSrc("http://localhost:5000/uploads/default.jpg");
+    if (imgSrc !== `${API_BASE_URL}/uploads/default.jpg`) {
+      setImgSrc(`${API_BASE_URL}/uploads/default.jpg`);
     }
   };
 
@@ -50,7 +51,7 @@ function Dashboard({ user }) {
 
   const handleViewCart = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/cart/${user?.id}`);
+      const res = await axios.get(`${API_BASE_URL}/api/cart/${user?.id}`);
       setCartItems(res.data.cart);
       setShowCart(true);
     } catch (err) {
@@ -60,7 +61,7 @@ function Dashboard({ user }) {
 
   const removeFromCart = async (productId) => {
     try {
-      await axios.delete(`http://localhost:5000/api/cart/${user?.id}/${productId}`);
+      await axios.delete(`${API_BASE_URL}/api/cart/${user?.id}/${productId}`);
       handleViewCart();
     } catch (error) {
       console.error("❗ Error removing item from cart:", error);
@@ -75,7 +76,7 @@ function Dashboard({ user }) {
     }
   
     try {
-      const res = await axios.post("http://localhost:5000/api/orders", {
+      const res = await axios.post(`${API_BASE_URL}/api/orders`, {
         user_id: user?.id,
       });
   
@@ -92,8 +93,6 @@ function Dashboard({ user }) {
     }
   };
    
-  
-
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prevSlide) => (prevSlide + 1) % images.length);
@@ -107,7 +106,7 @@ function Dashboard({ user }) {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/products");
+      const response = await axios.get(`${API_BASE_URL}/api/products`);
       setProducts(response.data.products);
       setLoading(false);
     } catch (error) {
@@ -119,7 +118,7 @@ function Dashboard({ user }) {
   const addToCart = async (productId) => {
     const qty = quantity[productId] || 1;
     try {
-      await axios.post("http://localhost:5000/api/cart", {
+      await axios.post(`${API_BASE_URL}/api/cart`, {
         user_id: user?.id,
         product_id: productId,
         quantity: qty,
@@ -157,82 +156,82 @@ function Dashboard({ user }) {
       </button>
 
       <div className="ecommerce-header d-flex justify-content-between align-items-center p-3">
-  <div className="logo-container">
-    <img src={logo} alt="Logo" className="logo" />
-  </div>
-  
-  <button className=" cart-button btn-warning cart-button" onClick={handleViewCart}>
-    🛍️ View Cart
-  </button>
-</div>
-
-<div className="ecommerce-main px-3 pb-5">
-  <h2 className="text-white mb-4 text-center">👋 Welcome, {user?.name || "Guest"}</h2>
-  {loading ? (
-    <p className="text-white text-center">Loading products...</p>
-  ) : (
-    <div className="row justify-content-center gap-4 product-grid">
-      {products.map((product) => (
-        <div key={product.id} className="col-sm-6 col-md-4 col-lg-3">
-          <div className="product-card text-center p-3">
-            <ProductImage imageUrl={product.image_url} productName={product.name} />
-            <h5 className="mt-2">{product.name}</h5>
-            <p>Available: {product.quantity}</p>
-            <div className="quantity-control d-flex justify-content-center align-items-center my-2">
-              <button onClick={() => handleQuantityChange(product.id, (quantity[product.id] || 1) - 1)} disabled={(quantity[product.id] || 1) <= 1}>-</button>
-              <span className="mx-2">{quantity[product.id] || 1}</span>
-              <button onClick={() => handleQuantityChange(product.id, (quantity[product.id] || 1) + 1)}>+</button>
-            </div>
-            <button className="btn btn-primary w-100" onClick={() => addToCart(product.id)}>Add to Cart</button>
-          </div>
+        <div className="logo-container">
+          <img src={logo} alt="Logo" className="logo" />
         </div>
-      ))}
-    </div>
-  )}
-</div>
-{/* Cart Modal */}
-          <Modal show={showCart} onHide={handleCloseCart} centered>
-            <Modal.Header closeButton>
-              <Modal.Title>🛒 Your Cart</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              {cartItems.length === 0 ? (
-                <p>Your cart is empty.</p>
-              ) : (
-                <div className="cart-scrollable" style={{ maxHeight: "300px", overflowY: "auto" }}>
-                  <ul className="list-group">
-                    {cartItems.map((item, index) => (
-                      <li
-                        key={index}
-                        className="list-group-item d-flex justify-content-between align-items-center"
-                      >
-                        <div>
-                          <strong>{item.name}</strong> <br />
-                          <small>Qty: {item.quantity}</small>
-                        </div>
-                        <Button
-                          variant="danger"
-                          size="sm"
-                          onClick={() => removeFromCart(item.product_id)}
-                        >
-                          ❌ Remove
-                        </Button>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </Modal.Body>
-            <Modal.Footer>
-              <Button variant="success" onClick={handleCheckout} disabled={cartItems.length === 0}>
-                ✅ Checkout
-              </Button>
-              <Button variant="secondary" onClick={handleCloseCart}>
-                Close
-              </Button>
-            </Modal.Footer>
-          </Modal>
+        
+        <button className="cart-button btn-warning cart-button" onClick={handleViewCart}>
+          🛍️ View Cart
+        </button>
+      </div>
 
+      <div className="ecommerce-main px-3 pb-5">
+        <h2 className="text-white mb-4 text-center">👋 Welcome, {user?.name || "Guest"}</h2>
+        {loading ? (
+          <p className="text-white text-center">Loading products...</p>
+        ) : (
+          <div className="row justify-content-center gap-4 product-grid">
+            {products.map((product) => (
+              <div key={product.id} className="col-sm-6 col-md-4 col-lg-3">
+                <div className="product-card text-center p-3">
+                  <ProductImage imageUrl={product.image_url} productName={product.name} />
+                  <h5 className="mt-2">{product.name}</h5>
+                  <p>Available: {product.quantity}</p>
+                  <div className="quantity-control d-flex justify-content-center align-items-center my-2">
+                    <button onClick={() => handleQuantityChange(product.id, (quantity[product.id] || 1) - 1)} disabled={(quantity[product.id] || 1) <= 1}>-</button>
+                    <span className="mx-2">{quantity[product.id] || 1}</span>
+                    <button onClick={() => handleQuantityChange(product.id, (quantity[product.id] || 1) + 1)}>+</button>
+                  </div>
+                  <button className="btn btn-primary w-100" onClick={() => addToCart(product.id)}>Add to Cart</button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Cart Modal */}
+      <Modal show={showCart} onHide={handleCloseCart} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>🛒 Your Cart</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {cartItems.length === 0 ? (
+            <p>Your cart is empty.</p>
+          ) : (
+            <div className="cart-scrollable" style={{ maxHeight: "300px", overflowY: "auto" }}>
+              <ul className="list-group">
+                {cartItems.map((item, index) => (
+                  <li
+                    key={index}
+                    className="list-group-item d-flex justify-content-between align-items-center"
+                  >
+                    <div>
+                      <strong>{item.name}</strong> <br />
+                      <small>Qty: {item.quantity}</small>
+                    </div>
+                    <Button
+                      variant="danger"
+                      size="sm"
+                      onClick={() => removeFromCart(item.product_id)}
+                    >
+                      ❌ Remove
+                    </Button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="success" onClick={handleCheckout} disabled={cartItems.length === 0}>
+            ✅ Checkout
+          </Button>
+          <Button variant="secondary" onClick={handleCloseCart}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }

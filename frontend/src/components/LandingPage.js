@@ -36,7 +36,6 @@ function LandingPage() {
               backgroundSize: 'cover', 
               backgroundPosition: 'center' 
             }}
-            onError={(e) => (e.target.style.backgroundImage = `url(${bg1})`)}
           />
         ))}
       </div>

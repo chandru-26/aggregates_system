@@ -10,6 +10,8 @@ import bg3 from "../assets/images/bg3.jpg";
 import bg4 from "../assets/images/bg4.jpg";
 import logo from "../assets/images/logo.png";
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:5000";
+
 const images = [bg1, bg2, bg3, bg4];
 
 function AddProduct({ user }) {
@@ -31,7 +33,8 @@ function AddProduct({ user }) {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/products");
+        const res = await axios.get(`${API_BASE_URL}/api/products`);
+
 
         // Make sure it's an array
         if (Array.isArray(res.data)) {
@@ -70,7 +73,9 @@ function AddProduct({ user }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5000/api/products", formData);
+      
+await axios.post(`${API_BASE_URL}/api/products`, formData);
+
       alert("✅ Product added successfully!");
       setFormData({ name: "", image_url: "", quantity: "" });
     } catch (error) {
