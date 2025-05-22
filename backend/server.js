@@ -10,7 +10,9 @@ const PORT = 5000;
 
 // Middleware
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors({
+  origin: 'https://aggregates-system.vercel.app/',
+}));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // PostgreSQL connection
