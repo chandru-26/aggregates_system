@@ -37,7 +37,7 @@ function LoginOwner({ setUser }) {
     setLoading(true);
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_BASE_URL}/api/loginOwner`,
+        `${process.env.REACT_APP_API_URL}/api/loginOwner`,
         formData
       );
       if (response.data.success) {

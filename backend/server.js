@@ -16,11 +16,21 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // PostgreSQL connection
 
 const isProduction = process.env.NODE_ENV === 'production';
-
+console.log("🛠️ ENV DB Config", {
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  passwordType: typeof process.env.DB_PASSWORD,
+});
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
+  user: process.env.DB_USER || 'postgres',
+  password: process.env.DB_PASSWORD || 'root',
+  host: process.env.DB_HOST || 'localhost',
+  port: process.env.DB_PORT || 5432,
+  database: process.env.DB_NAME || 'ordering_db',
   ssl: isProduction ? { rejectUnauthorized: false } : false,
 });
+
+
 
 
 // Test route

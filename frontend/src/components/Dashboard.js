@@ -13,7 +13,7 @@ import logo from "../assets/images/logo.png";
 
 const images = [bg1, bg2, bg3, bg4];
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:5000";
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
 const ProductImage = ({ imageUrl, productName }) => {
   const [imgSrc, setImgSrc] = useState(
