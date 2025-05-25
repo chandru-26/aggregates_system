@@ -21,7 +21,9 @@ function ShowOrders() {
   const fetchOrders = async () => {
     setLoadingOrders(true);
     try {
-      const res = await axios.get("https://your-backend.onrender.com/api/orders");
+      const res = await axios.get(
+        "https://your-backend.onrender.com/api/orders"
+      );
       setOrders(res.data.orders || []);
     } catch (err) {
       console.error("❗ Error fetching orders:", err);
@@ -46,13 +48,16 @@ function ShowOrders() {
     const newStatus = currentStatus === "Fulfilled" ? "Pending" : "Fulfilled";
     const fulfilledAt =
       newStatus === "Fulfilled" ? new Date().toISOString() : null;
-  
+
     try {
-      await axios.put(`http://localhost:5000/api/orders/${orderId}/status`, {
-        status: newStatus,
-        fulfilled_at: fulfilledAt,
-      });
-  
+      await axios.put(
+        `https://your-backend.onrender.com/api/orders/${orderId}/status`,
+        {
+          status: newStatus,
+          fulfilled_at: fulfilledAt,
+        }
+      );
+
       // Update the local state to reflect changes
       setOrders((prevOrders) =>
         prevOrders.map((order) =>
@@ -65,8 +70,6 @@ function ShowOrders() {
       console.error("❗ Error updating order status:", err);
     }
   };
-  
-  
 
   return (
     <div className="container-fluid owner-panel-container">
@@ -109,7 +112,6 @@ function ShowOrders() {
                     <th>Ordered At</th>
                     <th>Action</th>
                     <th>Fulfilled At</th>
-
                   </tr>
                 </thead>
                 <tbody>
@@ -132,17 +134,14 @@ function ShowOrders() {
                             handleToggleStatus(order.id, order.status)
                           }
                         >
-                          {order.status === "Fulfilled"
-                            ? "Pending"
-                            : "Fulfill"}
+                          {order.status === "Fulfilled" ? "Pending" : "Fulfill"}
                         </button>
                       </td>
                       <td>
-  {order.fulfilled_at
-    ? new Date(order.fulfilled_at).toLocaleString()
-    : "-"}
-</td>
-
+                        {order.fulfilled_at
+                          ? new Date(order.fulfilled_at).toLocaleString()
+                          : "-"}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
