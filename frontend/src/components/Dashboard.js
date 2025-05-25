@@ -17,14 +17,12 @@ const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
 const ProductImage = ({ imageUrl, productName }) => {
   const [imgSrc, setImgSrc] = useState(
-    imageUrl
-      ? `${API_BASE_URL}/uploads/${imageUrl}`
-      : `${API_BASE_URL}/uploads/default.jpg`
+    imageUrl ? `/assets/products/${imageUrl}` : `/assets/products/default.jpg`
   );
 
   const handleError = () => {
-    if (imgSrc !== `${API_BASE_URL}/uploads/default.jpg`) {
-      setImgSrc(`${API_BASE_URL}/uploads/default.jpg`);
+    if (imgSrc !== `/assets/products/default.jpg`) {
+      setImgSrc(`/assets/products/default.jpg`);
     }
   };
 
@@ -74,12 +72,12 @@ function Dashboard({ user }) {
       alert("🛒 Your cart is empty.");
       return;
     }
-  
+
     try {
       const res = await axios.post(`${API_BASE_URL}/api/orders`, {
         user_id: user?.id,
       });
-  
+
       if (res.status === 200 || res.status === 201) {
         alert("✅ Order placed successfully!");
         setCartItems([]);
@@ -92,7 +90,7 @@ function Dashboard({ user }) {
       alert("❗ Error during checkout.");
     }
   };
-   
+
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prevSlide) => (prevSlide + 1) % images.length);
@@ -151,7 +149,10 @@ function Dashboard({ user }) {
         ))}
       </div>
 
-      <button className="logout-button btn btn-light mb-3" onClick={handleLogout}>
+      <button
+        className="logout-button btn btn-light mb-3"
+        onClick={handleLogout}
+      >
         🔒 Logout
       </button>
 
@@ -159,14 +160,19 @@ function Dashboard({ user }) {
         <div className="logo-container">
           <img src={logo} alt="Logo" className="logo" />
         </div>
-        
-        <button className="cart-button btn-warning cart-button" onClick={handleViewCart}>
+
+        <button
+          className="cart-button btn-warning cart-button"
+          onClick={handleViewCart}
+        >
           🛍️ View Cart
         </button>
       </div>
 
       <div className="ecommerce-main px-3 pb-5">
-        <h2 className="text-white mb-4 text-center">👋 Welcome, {user?.name || "Guest"}</h2>
+        <h2 className="text-white mb-4 text-center">
+          👋 Welcome, {user?.name || "Guest"}
+        </h2>
         {loading ? (
           <p className="text-white text-center">Loading products...</p>
         ) : (
@@ -174,15 +180,42 @@ function Dashboard({ user }) {
             {products.map((product) => (
               <div key={product.id} className="col-sm-6 col-md-4 col-lg-3">
                 <div className="product-card text-center p-3">
-                  <ProductImage imageUrl={product.image_url} productName={product.name} />
+                  <ProductImage
+                    imageUrl={product.image_url}
+                    productName={product.name}
+                  />
                   <h5 className="mt-2">{product.name}</h5>
                   <p>Available: {product.quantity}</p>
                   <div className="quantity-control d-flex justify-content-center align-items-center my-2">
-                    <button onClick={() => handleQuantityChange(product.id, (quantity[product.id] || 1) - 1)} disabled={(quantity[product.id] || 1) <= 1}>-</button>
+                    <button
+                      onClick={() =>
+                        handleQuantityChange(
+                          product.id,
+                          (quantity[product.id] || 1) - 1
+                        )
+                      }
+                      disabled={(quantity[product.id] || 1) <= 1}
+                    >
+                      -
+                    </button>
                     <span className="mx-2">{quantity[product.id] || 1}</span>
-                    <button onClick={() => handleQuantityChange(product.id, (quantity[product.id] || 1) + 1)}>+</button>
+                    <button
+                      onClick={() =>
+                        handleQuantityChange(
+                          product.id,
+                          (quantity[product.id] || 1) + 1
+                        )
+                      }
+                    >
+                      +
+                    </button>
                   </div>
-                  <button className="btn btn-primary w-100" onClick={() => addToCart(product.id)}>Add to Cart</button>
+                  <button
+                    className="btn btn-primary w-100"
+                    onClick={() => addToCart(product.id)}
+                  >
+                    Add to Cart
+                  </button>
                 </div>
               </div>
             ))}
@@ -199,7 +232,10 @@ function Dashboard({ user }) {
           {cartItems.length === 0 ? (
             <p>Your cart is empty.</p>
           ) : (
-            <div className="cart-scrollable" style={{ maxHeight: "300px", overflowY: "auto" }}>
+            <div
+              className="cart-scrollable"
+              style={{ maxHeight: "300px", overflowY: "auto" }}
+            >
               <ul className="list-group">
                 {cartItems.map((item, index) => (
                   <li
@@ -224,7 +260,11 @@ function Dashboard({ user }) {
           )}
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="success" onClick={handleCheckout} disabled={cartItems.length === 0}>
+          <Button
+            variant="success"
+            onClick={handleCheckout}
+            disabled={cartItems.length === 0}
+          >
             ✅ Checkout
           </Button>
           <Button variant="secondary" onClick={handleCloseCart}>
