@@ -79,7 +79,7 @@ function AddProduct({ user }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`${API_BASE_URL}/api/products`, formData);
+      await axios.post(`${process.env.REACT_APP_API_URL}/api/products`, formData);
       alert("✅ Product added successfully!");
       setFormData({ name: "", image_url: "", quantity: "" });
 
