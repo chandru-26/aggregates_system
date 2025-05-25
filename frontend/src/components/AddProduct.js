@@ -15,7 +15,6 @@ const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 const images = [bg1, bg2, bg3, bg4];
 
 function AddProduct({ user }) {
-  // ✅ Accept user as a prop
   const navigate = useNavigate();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [formData, setFormData] = useState({
@@ -24,8 +23,6 @@ function AddProduct({ user }) {
     quantity: "",
   });
 
-  const [cart, setCart] = useState([]);
-  const [orders, setOrders] = useState([]);
   const [showOrders, setShowOrders] = useState(false);
   const [loadingOrders, setLoadingOrders] = useState(false);
   const [products, setProducts] = useState([]);
@@ -35,26 +32,23 @@ function AddProduct({ user }) {
       try {
         const res = await axios.get(`${API_BASE_URL}/api/products`);
 
-
-        // Make sure it's an array
         if (Array.isArray(res.data)) {
           setProducts(res.data);
         } else if (res.data.products) {
-          setProducts(res.data.products); // in case API returns { products: [...] }
+          setProducts(res.data.products);
         } else {
           console.error("❗ Unexpected data format:", res.data);
-          setProducts([]); // fallback
+          setProducts([]);
         }
       } catch (error) {
         console.error("❗ Error fetching products:", error);
-        setProducts([]); // fallback to empty array on error
+        setProducts([]);
       }
     };
 
     fetchProducts();
   }, []);
 
-  // Background Slideshow Effect
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prevSlide) => (prevSlide + 1) % images.length);
@@ -62,22 +56,36 @@ function AddProduct({ user }) {
     return () => clearInterval(interval);
   }, []);
 
-  // Fetch cart items
+  const handleRemoveProduct = async (productId) => {
+    if (!window.confirm("Are you sure you want to delete this product?")) return;
 
-  // Handle Input Change
+    try {
+      await axios.delete(`${API_BASE_URL}/api/products/${productId}`);
+      alert("✅ Product removed successfully!");
+
+      setProducts((prevProducts) =>
+        prevProducts.filter((product) => product.id !== productId)
+      );
+    } catch (error) {
+      console.error("❗ Error removing product:", error);
+      alert("❗ Failed to remove product.");
+    }
+  };
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Submit New Product
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      
-await axios.post(`${API_BASE_URL}/api/products`, formData);
-
+      await axios.post(`${API_BASE_URL}/api/products`, formData);
       alert("✅ Product added successfully!");
       setFormData({ name: "", image_url: "", quantity: "" });
+
+      // Refresh products after adding
+      const res = await axios.get(`${API_BASE_URL}/api/products`);
+      setProducts(Array.isArray(res.data) ? res.data : res.data.products || []);
     } catch (error) {
       console.error("❗ Error adding product:", error);
       alert("❗ Failed to add product.");
@@ -89,7 +97,6 @@ await axios.post(`${API_BASE_URL}/api/products`, formData);
       <button className="back-button" onClick={() => navigate(-1)}>
         ⬅ Back
       </button>
-  
 
       {/* Background Slideshow */}
       <div className="slideshow-container">
@@ -174,6 +181,14 @@ await axios.post(`${API_BASE_URL}/api/products`, formData);
                         📅 Created At:{" "}
                         {new Date(product.created_at).toLocaleString()}
                       </p>
+
+                      {/* Remove Button */}
+                      <button
+                        className="btn btn-danger btn-sm mt-2"
+                        onClick={() => handleRemoveProduct(product.id)}
+                      >
+                        Remove
+                      </button>
                     </div>
                   ))
                 )}
