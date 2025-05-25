@@ -21,9 +21,7 @@ function ShowOrders() {
   const fetchOrders = async () => {
     setLoadingOrders(true);
     try {
-      const res = await axios.get(
-        "https://your-backend.onrender.com/api/orders"
-      );
+      const res = await axios.get("https://aggregates-systembck.onrender.com");
       setOrders(res.data.orders || []);
     } catch (err) {
       console.error("❗ Error fetching orders:", err);
