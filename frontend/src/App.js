@@ -58,7 +58,11 @@ function App() {
         <Route
           path="/owner"
           element={
-            user ? <OwnerPanel user={user} /> : <Navigate to="/loginOwner" replace />
+            user ? (
+              <OwnerPanel user={user} />
+            ) : (
+              <Navigate to="/loginOwner" replace />
+            )
           }
         />
       </Routes>

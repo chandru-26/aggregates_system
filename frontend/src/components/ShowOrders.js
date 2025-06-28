@@ -93,10 +93,10 @@ function ShowOrders() {
             <img src={logo} alt="Logo" className="logo" />
           </div>
 
-          <h2 className="text-white mb-3">📦 Orders</h2>
+          <h2 className="text-white mb-3"> Orders</h2>
 
           {loadingOrders ? (
-            <p className="text-white">⏳ Loading orders...</p>
+            <p className="text-white"> Loading orders...</p>
           ) : orders.length === 0 ? (
             <p className="text-white">No orders found.</p>
           ) : (

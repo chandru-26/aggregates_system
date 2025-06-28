@@ -82,7 +82,7 @@ function OwnerPanel({ user }) {
             <img src={logo} alt="Logo" className="logo" />
           </div>
 
-          <h2 className="text-white mb-3">📦 Add New Product</h2>
+          <h2 className="text-white mb-3"> Add New Product</h2>
           <button
             className="AddProd btn-success btn-lg m-2"
             onClick={() => navigate('/AddProd')}
@@ -94,7 +94,7 @@ function OwnerPanel({ user }) {
             className="ShowProd btn-light mt-4"
             onClick={() => setShowOrders(!showOrders)}
           >
-            {showOrders ? " Hide Products" : "📂 Show Products"}
+            {showOrders ? " Hide Products" : " Show Products"}
           </button>
 
           {showOrders && (

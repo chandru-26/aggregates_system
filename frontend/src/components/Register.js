@@ -73,7 +73,7 @@ function Register() {
             <img src={logo} alt="Logo" className="logo" />
           </div>
 
-          <h2 className="text-white mb-3">📝 Customer Registration</h2>
+          <h2 className="text-white mb-3"> Customer Registration</h2>
           <form onSubmit={handleSubmit}>
             <input
               type="text"

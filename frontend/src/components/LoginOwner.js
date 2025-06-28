@@ -74,7 +74,7 @@ function LoginOwner({ setUser }) {
             <img src={logo} alt="Logo" className="logo" />
           </div>
 
-          <h2 className="text-white mb-3">🔐 Owner Login</h2>
+          <h2 className="text-white mb-3"> Owner Login</h2>
           <form onSubmit={handleSubmit}>
             <input
               type="email"

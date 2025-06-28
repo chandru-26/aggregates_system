@@ -153,7 +153,7 @@ function Dashboard({ user }) {
         className="logout-button btn btn-light mb-3"
         onClick={handleLogout}
       >
-        🔒 Logout
+         Logout
       </button>
 
       <div className="ecommerce-header d-flex justify-content-between align-items-center p-3">
@@ -165,13 +165,13 @@ function Dashboard({ user }) {
           className="cart-button btn-warning cart-button"
           onClick={handleViewCart}
         >
-          🛍️ View Cart
+           View Cart
         </button>
       </div>
 
       <div className="ecommerce-main px-3 pb-5">
         <h2 className="text-white mb-4 text-center">
-          👋 Welcome, {user?.name || "Guest"}
+           Welcome, {user?.name || "Guest"}
         </h2>
         {loading ? (
           <p className="text-white text-center">Loading products...</p>
@@ -226,7 +226,7 @@ function Dashboard({ user }) {
       {/* Cart Modal */}
       <Modal show={showCart} onHide={handleCloseCart} centered>
         <Modal.Header closeButton>
-          <Modal.Title>🛒 Your Cart</Modal.Title>
+          <Modal.Title> Your Cart</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {cartItems.length === 0 ? (

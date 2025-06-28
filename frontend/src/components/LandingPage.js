@@ -48,7 +48,7 @@ function LandingPage() {
             <img src={logo} alt="Logo" className="logo" />
           </div>
 
-          <h1 className="landing-title">🏗️ Welcome to Aggregates Ordering System</h1>
+          <h1 className="landing-title"> Welcome to Aggregates Ordering System</h1>
           <p className="landing-description">
             Easily manage orders, view products, and track deliveries in real-time!
           </p>
@@ -57,19 +57,19 @@ function LandingPage() {
               className="btn btn-primary btn-lg m-2"
               onClick={() => navigate('/register')}
             >
-              📝 Register
+               Register
             </button>
             <button
               className="btn btn-success btn-lg m-2"
               onClick={() => navigate('/login')}
             >
-              🔐 Login
+               Login
             </button>
             <button
               className="btn btn-warning btn-lg m-2"
               onClick={() => navigate('/loginOwner')}
             >
-              📊 Owner Panel
+               Owner Panel
             </button>
           </div>
         </div>
