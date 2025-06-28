@@ -69,7 +69,7 @@ function Dashboard({ user }) {
 
   const handleCheckout = async () => {
     if (cartItems.length === 0) {
-      alert("🛒 Your cart is empty.");
+      alert(" Your cart is empty.");
       return;
     }
 

@@ -10,6 +10,7 @@ import bg3 from "../assets/images/bg3.jpg";
 import bg4 from "../assets/images/bg4.jpg";
 import logo from "../assets/images/logo.png";
 
+const API_BASE_URL = process.env.REACT_APP_API_URL;
 
 
 const images = [bg1, bg2, bg3, bg4];
