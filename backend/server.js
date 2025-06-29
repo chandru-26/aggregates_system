@@ -14,7 +14,28 @@ const isProduction = process.env.NODE_ENV === 'production';
 // Middleware
 app.use(helmet());
 app.use(bodyParser.json());
-app.use(cors({ origin: process.env.CLIENT_URL }));
+
+const allowedOrigins = [
+  'https://aggregates-system.vercel.app',
+  'https://aggregates-systembck.onrender.com',
+  'http://localhost:3000',
+];
+
+// Allow all *.vercel.app subdomains
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin) || origin.endsWith('.vercel.app')) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    credentials: true, // optional if you're using cookies/auth
+  })
+);
+
+
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Rate limiting (prevent brute force / abuse)
