@@ -14,24 +14,7 @@ const isProduction = process.env.NODE_ENV === 'production';
 // Middleware
 app.use(helmet());
 app.use(bodyParser.json());
-const allowedOrigins = [
-  'https://aggregates-system.vercel.app', // production
-  'https://aggregates-system-j95la5k8f-chandrus-projects-1b1b8fa2.vercel.app', // vercel preview
-  'http://localhost:3000' // local development
-];
-
-app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      console.error(`❌ Blocked by CORS: ${origin}`);
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true
-}));
-
+app.use(cors({ origin: process.env.CLIENT_URL }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Rate limiting (prevent brute force / abuse)
